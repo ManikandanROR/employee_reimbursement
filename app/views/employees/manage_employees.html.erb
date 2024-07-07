@@ -1,0 +1,99 @@
+<div class="card">
+  <div class="card-body table-view">
+    <div id="add_new_button" class = "text-right"><%= link_to 'Add Employee', add_view_edit_employee_path(type: 1), class: 'btn btn-primary', role: 'button' %></div>
+    <div class="table-responsive pt-4">
+      <table id="manage_employees_table" class="table"></table>
+    </div>
+</div>
+<script>
+  var savedSearchIndex = '';
+  supplier_table = $('#manage_employees_table').DataTable({
+        dom: 'frti',
+        stateSave: true,
+        stateDuration: -1,
+        responsive: false,
+        autoWidth: false,
+        rowGroup: false, 
+        stateSaveParams: function(settings, data) {
+        },
+        stateLoadParams: function(settings, data) {
+          data.search.search = savedSearchIndex;
+        },
+        initComplete: function(settings, json) {
+          this.api().search(savedSearchIndex).draw();
+          $('.dataTables_filter').attr('data-original-title', 'Please type the search term and press "Enter" or click the search icon').tooltip();
+        },
+        pageLength: 100,
+        paging: true,
+        searchDealy: 3000,
+        processing: true,
+        serverSide: true,
+        ajax: {
+          url: '<%=get_employee_data_path%>',
+          data: function (d) {
+            sorting_column = null
+             $.each(d.order, function(){
+                if (this.dir == 'asc') {
+                  sorting_column = this
+                }
+              })
+            return $.extend( {}, d, {
+              data_sorting: sorting_column,
+            });
+          },
+          error: function() {
+            alert_message('<%= t :grid_load_data_error, grid_type: 'Supplier' %>', 'info', 'OK')
+          },
+          complete: function(data, settings) {
+            
+          }
+        },
+        columns: [
+          { title: 'Employee Name', data: 'employee_name', width: "35%", className: 'data-table-content-center'},
+          { title: 'Email', data: 'email', width: "35%", orderable: false, className: 'data-table-content-center'},
+          { title: 'Designation', data: 'designation', width: "15%", orderable: false, className: 'data-table-content-center' },
+          { title: 'Manage Bill', data: 'manage_bill', width: "5%", orderable: false, className: 'data-table-content-center' },
+          { title: 'Actions', data: 'action', width: "10%", orderable: false, className: 'data-table-content-center' }
+        ],
+        deferRender: true,
+        orderClasses: false,
+        scrollCollapse: true,
+        scrollY: 320,
+        scrollX: true,
+        scrollCollapse: true,
+        columnDefs: [
+          {targets: [0], searchable: true}
+        ],
+        language: {
+          search: "_INPUT_",
+          searchPlaceholder: "Search Company Name",
+          emptyTable: "No Record(s) Found",
+          infoEmpty: "",
+          zeroRecords: "No Record(s) Found",
+          loadingRecords: "Loading...",
+          loadingRecords: '<i class="fas fa-spinner fa-pulse fa-2x fa-fw"></i>',
+          info: "Showing <b>_START_ to _END_</b> (of _TOTAL_)",
+          infoFiltered: "",
+          processing: '<i class="fas fa-spinner fa-pulse fa-2x fa-fw"></i>'
+        },
+        order: [[0,"asc"]],
+        stripeClasses: ['odd-row', 'even-row'],
+      });
+
+  function delete_reason(user_token) {
+    $.when(load_third_page("/delete_reason_lightbox/"+user_token, "", "Delete", "GET", "550", "HideThirdDialog()")).then(function() {
+      $("body").addClass("modal-open");
+      load_maxlength('supplier_delist_relist_other_reason', 'bottom');
+      $('[data-toggle="tooltip"]').tooltip();
+    });
+  }
+
+  function submit_valid() {
+    if($('#delete_reason').val() == '') {
+      alert_message('Please Provide reason for delete', 'info', 'OK');
+      return false;
+    } else {
+      $('#delete_form').submit();
+    }
+  }
+</script>

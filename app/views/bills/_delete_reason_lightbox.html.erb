@@ -1,0 +1,9 @@
+<%= form_with url: create_and_update_bill_path(type:4, user_token: params[:user_token], token: params[:token]), method: :post, id: 'delete_form' do |form| %>
+  <div class='modal-body'>
+    <%= form.text_area :reason, rows: "6", cols: "15", id: 'reason',  class: 'form-control'%>
+  </div>
+  <div class='modal-footer'>
+    <%= form.submit 'Submit', type: :button, class:'btn btn-primary waves-effect waves-light', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: 'OK', onclick: 'submit_valid()'%>
+    <%= form.button 'Cancel', type: :button, class:'btn btn-primary waves-effect waves-light', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: 'Cancel', onclick: 'HideThirdDialog()'%>
+  </div>
+<%end%>

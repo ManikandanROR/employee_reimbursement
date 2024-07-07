@@ -1,0 +1,26 @@
+<h1>Submitted Bills</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Amount</th>
+      <th>Date</th>
+      <th>Employee</th>
+      <th>Department</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @bills.each do |bill| %>
+      <tr>
+        <td><%= bill.type %></td>
+        <td><%= bill.amount %></td>
+        <td><%= bill.created_at.to_date %></td>
+        <td><%= bill.employee.first_name %> <%= bill.employee.last_name %></td>
+        <td><%= bill.employee.department %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'Back', employees_path %>

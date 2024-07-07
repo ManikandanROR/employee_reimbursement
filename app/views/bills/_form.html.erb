@@ -1,0 +1,60 @@
+<%= form_for(:bill, url: create_and_update_bill_path(type: params[:type],user_token: params[:user_token],token: params[:token]), :html => { :id => 'add_bill_form' }) do |f| %>
+  <div class= "row">
+    <div class = "col-3">
+      <%= f.label :bill_type, 'Bill Type', class: "control-label required"%>
+      <%= f.text_field :bill_type, id: 'bill_type',  class: 'form-control', placeholder: 'Bill Type', value: @bill_detail&.bill_type, readonly: @readonly%>
+    </div>
+
+    <div class = "col-3">
+      <%= f.label :amount, 'Amount', class: "control-label required"%>
+      <%= f.number_field :amount, id: 'amount',  class: 'form-control', placeholder: 'Bill Amount', value: @bill_detail&.amount, readonly: @readonly%>
+    </div>
+
+    <div class = "col-3">
+      <% if params[:type].to_i == 1 and params[:type].to_i == 2%>
+        <%= f.hidden_field :employee_id, value:@employee_id.token%>
+      <% elsif params[:type].to_i == 3%>
+        <%= f.label :employee_id,'Employee Id', class: "control-label required"%>
+        <%= f.number_field :employee_id, id: 'employee_id', class: 'form-control', value: @bill_detail&.employee_id, placeholder: 'Employee Id', readonly: @readonly%>
+      <% end%>
+    </div>
+
+  </div>
+
+
+  <div class="field_wrapper" style = "margin-top: 15px;"></div>
+  <% if params[:type].to_i == 1 %>
+    <div class = "text-right">
+      <%= f.button 'Refresh', type: :reset, class: 'btn btn-primary mr-2', title: 'Refresh'%>
+      <%= f.submit 'Save', onclick: 'submit_form()', type: :button, class:'btn btn-primary'%>
+    </div>
+  <% elsif params[:type].to_i == 2 %>
+    <div class = "text-right">
+      <%= f.button 'Refresh', type: :reset, class: 'btn btn-primary mr-2', title: 'Refresh'%>
+      <%= f.submit 'Update', onclick: 'submit_form()', type: :button, class:'btn btn-primary'%>
+    </div>
+  <% elsif params[:type].to_i == 3 %>
+    <div class = "text-right">
+      <%= link_to 'Back', :back, class: 'btn btn-primary', role: 'button' %>
+    </div>
+  <%end%>
+<%end%>
+
+<script type="text/javascript">
+  function submit_form(){
+    if($('#first_name').val() == 0){
+      alert_message('Please Enter First Name', 'info', 'OK');
+      return false;
+    }
+    if($('#last_name').val() == 0){
+      alert_message('Please Enter Last Name', 'info', 'OK');
+      return false;
+    }
+    if($('#email').val() == 0){
+      alert_message('Please Enter Email', 'info', 'OK');
+      return false;
+    }
+     $('#add_bill_form').submit();
+  }
+
+</script>

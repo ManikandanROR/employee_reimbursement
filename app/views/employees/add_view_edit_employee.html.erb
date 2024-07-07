@@ -1,0 +1,15 @@
+<div class="card">
+  <div class="card-body table-view">
+    <% if params[:type].to_i == 1 %>
+      <div><label style="font-size: 40px;">Add Employee</lable></div>
+      <br><br>
+    <% elsif params[:type].to_i == 2 %>
+      <div><label style="font-size: 40px;">Edit Employee</lable></div>
+      <br><br>
+    <% elsif params[:type].to_i == 3 %>
+      <div><label style="font-size: 40px;">View Employee</lable></div>
+      <br><br>
+    <%end%>
+    <%= render 'form' %>
+  </div>
+</div>
